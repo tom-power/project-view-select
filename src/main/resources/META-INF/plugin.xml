@@ -1,0 +1,26 @@
+<idea-plugin>
+    <id>com.github.tom-power.go-to-project-view</id>
+    <name>Go to project view</name>
+    <version>1.1.2</version>
+    <vendor email="" url="https://github.com/tom-power/project-view-actions">Tom Power</vendor>
+
+    <description>
+        <![CDATA[
+            IntelliJ plugin providing actions to focus on <a href="https://www.jetbrains.com/help/idea/project-tool-window.html#views">project window views</a>.<br>
+        ]]>
+    </description>
+
+    <idea-version since-build="141.0" until-build="183.1044"/>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="GoToChangedFiles" class="com.github.tompower.pva.ChangedFiles" text="Project: changed files">
+        </action>
+    </actions>
+
+</idea-plugin>
