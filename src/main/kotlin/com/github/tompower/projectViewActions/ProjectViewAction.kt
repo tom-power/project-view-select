@@ -7,23 +7,43 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.ex.ProjectManagerEx
+import com.intellij.openapi.wm.ToolWindowId
+import com.intellij.openapi.wm.ToolWindowManager
 
-
-open class ProjectViewAction : AnAction(), DumbAware {
-    fun changeView(id: String) {
-        val projectManager = ProjectManagerEx.getInstance()
-        projectManager.openProjects.singleOrNull { it.isOpen }?.let {
-            val projectView = ProjectView.getInstance(it) as ProjectViewImpl
-            projectView.changeView(id)
+abstract class ProjectViewAction : AnAction(), DumbAware {
+    protected fun changeViewAction(viewPaneId: String, event: AnActionEvent) {
+        projectView()?.let { projectView ->
+            if(!isProjectWindowActive() || projectView.isCurrent(viewPaneId)) {
+                activateProjectWindow(event)
+            }
+            projectView.changeView(viewPaneId)
         }
     }
 
-    override fun actionPerformed(event: AnActionEvent) {
-        val actionManager = ActionManager.getInstance()
-        actionManager.getAction("ActivateProjectToolWindow").actionPerformed(event)
-    }
+    private fun projectView(): ProjectView? =
+        project()?.let {
+            ProjectView.getInstance(it) as ProjectViewImpl
+        }
 
-    override fun update(event: AnActionEvent) {
-        super.update(event)
+    private fun ProjectView.isCurrent(viewPaneId: String): Boolean = currentProjectViewPane?.id == viewPaneId
+
+    private fun isProjectWindowActive(): Boolean = windowManager()?.activeToolWindowId == ToolWindowId.PROJECT_VIEW
+
+    private fun windowManager() =
+        project()
+            ?.let { ToolWindowManager.getInstance(it) }
+
+    private fun project() = ProjectManagerEx.getInstance().openProjects.singleOrNull { it.isOpen }
+
+
+    private fun projectToolWindow() =
+        windowManager()
+            ?.getToolWindow(ToolWindowId.PROJECT_VIEW)
+
+
+    private fun activateProjectWindow(event: AnActionEvent) {
+        ActionManager.getInstance()
+            .getAction("ActivateProjectToolWindow")
+            .actionPerformed(event)
     }
 }
