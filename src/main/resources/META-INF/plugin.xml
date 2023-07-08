@@ -1,12 +1,12 @@
 <idea-plugin>
-    <id>com.github.tom-power.project-view-actions</id>
-    <name>Project View Actions</name>
-    <version>1.1.2</version>
-    <vendor email="" url="https://github.com/tom-power/project-view-actions">Tom Power</vendor>
+    <id>com.github.tom-power.project-view-select</id>
+    <name>Project View Select</name>
+    <version>0.1.0</version>
+    <vendor email="" url="https://github.com/tom-power/project-view-select">Tom Power</vendor>
 
     <description>
         <![CDATA[
-            IntelliJ plugin providing actions for focusing on <a href="https://www.jetbrains.com/help/idea/project-tool-window.html#views">project window views</a>.<br>
+            IntelliJ plugin providing actions to select <a href="https://www.jetbrains.com/help/idea/project-tool-window.html#views">project window views</a>.<br>
         ]]>
     </description>
 
@@ -19,12 +19,12 @@
 
     <actions>
         <action id="ProjectViewProject"
-                class="com.github.tompower.projectViewActions.Project"
-                text="Project Window View Project">
+                class="com.github.tompower.projectViewSelect.Project"
+                text="Project View Select Project">
         </action>
         <action id="ProjectViewScope"
-                class="com.github.tompower.projectViewActions.Scope"
-                text="Project Window View Scope">
+                class="com.github.tompower.projectViewSelect.Scope"
+                text="Project View Select Scope">
         </action>
     </actions>
 

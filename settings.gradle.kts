@@ -1,2 +1,1 @@
-rootProject.name = "project-view-actions"
-
+rootProject.name = "project-view-select"
