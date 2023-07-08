@@ -1,4 +1,4 @@
-package com.github.tompower.projectViewActions
+package com.github.tompower.projectViewSelect
 
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.ide.projectView.impl.ProjectViewImpl
@@ -10,10 +10,10 @@ import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.intellij.openapi.wm.ToolWindowId
 import com.intellij.openapi.wm.ToolWindowManager
 
-abstract class ProjectViewAction : AnAction(), DumbAware {
-    protected fun changeViewAction(viewPaneId: String, event: AnActionEvent) {
+abstract class ProjectViewSelect : AnAction(), DumbAware {
+    protected fun selectViewAction(viewPaneId: String, event: AnActionEvent) {
         projectView()?.let { projectView ->
-            if(!isProjectWindowActive() || projectView.isCurrent(viewPaneId)) {
+            if(!isProjectWindowActive() || projectView.isCurrentViewPane(viewPaneId)) {
                 activateProjectWindow(event)
             }
             projectView.changeView(viewPaneId)
@@ -25,7 +25,7 @@ abstract class ProjectViewAction : AnAction(), DumbAware {
             ProjectView.getInstance(it) as ProjectViewImpl
         }
 
-    private fun ProjectView.isCurrent(viewPaneId: String): Boolean = currentProjectViewPane?.id == viewPaneId
+    private fun ProjectView.isCurrentViewPane(viewPaneId: String): Boolean = currentProjectViewPane?.id == viewPaneId
 
     private fun isProjectWindowActive(): Boolean = windowManager()?.activeToolWindowId == ToolWindowId.PROJECT_VIEW
 
