@@ -17,11 +17,11 @@
     </extensions>
 
     <actions>
-        <action id="ProjectViewProject"
+        <action id="ProjectViewSelectProject"
                 class="com.github.tompower.projectViewSelect.Project"
                 text="Project View Select Project">
         </action>
-        <action id="ProjectViewScopeAllChangedFiles"
+        <action id="ProjectViewSelectScopeAllChangedFiles"
                 class="com.github.tompower.projectViewSelect.ScopeAllChangedFiles"
                 text="Project View Select Scope All Changed Files">
         </action>
