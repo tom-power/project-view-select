@@ -6,9 +6,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 class Project : ProjectViewSelect() {
     override fun actionPerformed(event: AnActionEvent) {
         event.project?.let { project ->
-            super.selectViewAction(
+            super.action(
+                event = event,
                 viewPane = ProjectViewPane(project),
-                event = event
+                namedScope = null
             )
         }
     }
