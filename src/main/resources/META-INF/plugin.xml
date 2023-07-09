@@ -10,7 +10,6 @@
         ]]>
     </description>
 
-
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
