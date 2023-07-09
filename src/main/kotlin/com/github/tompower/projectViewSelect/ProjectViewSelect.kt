@@ -10,43 +10,61 @@ import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowId
 import com.intellij.openapi.wm.ToolWindowManager
+import com.intellij.psi.search.scope.packageSet.NamedScope
 
 abstract class ProjectViewSelect : AnAction(), DumbAware {
-    protected fun selectViewAction(viewPane: AbstractProjectViewPane, event: AnActionEvent) {
+    protected fun action(
+        event: AnActionEvent,
+        viewPane: AbstractProjectViewPane,
+        namedScope: NamedScope?
+    ) {
         event.project?.let { project ->
-            SelectViewAction(project, event).invoke(viewPane)
+            ProjectViewSelectAction(project, event).invoke(viewPane, namedScope)
         }
     }
-}
 
-class SelectViewAction(
-    private val project: Project,
-    private val event: AnActionEvent,
-) : (AbstractProjectViewPane) -> Unit {
-    private val projectView: ProjectView get() = ProjectView.getInstance(project) as ProjectViewImpl
-    private val windowManager: ToolWindowManager get() = ToolWindowManager.getInstance(project)
+    class ProjectViewSelectAction(
+        private val project: Project,
+        private val event: AnActionEvent,
+    ) : (AbstractProjectViewPane, NamedScope?) -> Unit {
+        private val projectView: ProjectView get() = ProjectView.getInstance(project) as ProjectViewImpl
+        private val windowManager: ToolWindowManager get() = ToolWindowManager.getInstance(project)
 
-    override fun invoke(viewPane: AbstractProjectViewPane) {
-        if(shouldActivateProjectWindow(viewPane)) {
-            activateProjectWindow()
+        override fun invoke(viewPane: AbstractProjectViewPane, namedScope: NamedScope?) {
+            if (shouldActivateProjectWindow(viewPane, namedScope)) {
+                activateProjectWindow()
+            }
+            changeView(viewPane, namedScope)
         }
-        changeView(viewPane)
-    }
 
-    private fun shouldActivateProjectWindow(viewPane: AbstractProjectViewPane): Boolean {
-        fun ProjectView.isCurrentViewPane(): Boolean = currentProjectViewPane.id == viewPane.id
-        fun isProjectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
+        private fun shouldActivateProjectWindow(viewPane: AbstractProjectViewPane, namedScope: NamedScope?): Boolean {
+            fun isCurrentViewPane(): Boolean {
+                fun ProjectView.isCurrentViewPaneId(): Boolean = currentProjectViewPane.id == viewPane.id
+                fun ProjectView.isCurrentViewPaneSubId(): Boolean =
+                    namedScope
+                        ?.let { currentProjectViewPane.subId == it.subId() }
+                        ?: true
 
-        return !isProjectWindowActive() || projectView.isCurrentViewPane()
-    }
+                return projectView.isCurrentViewPaneId() && projectView.isCurrentViewPaneSubId()
+            }
 
-    private fun activateProjectWindow() {
-        ActionManager.getInstance()
-            .getAction("ActivateProjectToolWindow")
-            .actionPerformed(event)
-    }
+            fun isProjectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
 
-    private fun changeView(viewPane: AbstractProjectViewPane) {
-        projectView.changeView(viewPane.id)
+            return !isProjectWindowActive() || isCurrentViewPane()
+        }
+
+        private fun activateProjectWindow() {
+            ActionManager.getInstance()
+                .getAction("ActivateProjectToolWindow")
+                .actionPerformed(event)
+        }
+
+        private fun changeView(viewPane: AbstractProjectViewPane, namedScope: NamedScope?) {
+            namedScope
+                ?.let { projectView.changeViewCB(viewPane.id, namedScope.subId()) }
+                ?: projectView.changeView(viewPane.id)
+        }
+
+        private fun NamedScope.subId() = this.toString() + "; " + this.javaClass
     }
 }

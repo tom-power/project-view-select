@@ -21,9 +21,9 @@
                 class="com.github.tompower.projectViewSelect.Project"
                 text="Project View Select Project">
         </action>
-        <action id="ProjectViewScope"
-                class="com.github.tompower.projectViewSelect.Scope"
-                text="Project View Select Scope">
+        <action id="ProjectViewScopeAllChangedFiles"
+                class="com.github.tompower.projectViewSelect.ScopeAllChangedFiles"
+                text="Project View Select Scope All Changed Files">
         </action>
     </actions>
 
