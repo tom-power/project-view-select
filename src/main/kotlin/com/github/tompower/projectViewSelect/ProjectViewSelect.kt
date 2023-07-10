@@ -31,10 +31,10 @@ abstract class ProjectViewSelect : AnAction(), DumbAware {
         private val windowManager: ToolWindowManager get() = ToolWindowManager.getInstance(project)
 
         override fun invoke(viewPane: AbstractProjectViewPane, namedScope: NamedScope?) {
+            changeView(viewPane, namedScope)
             if (shouldActivateProjectWindow(viewPane, namedScope)) {
                 activateProjectWindow()
             }
-            changeView(viewPane, namedScope)
         }
 
         private fun shouldActivateProjectWindow(viewPane: AbstractProjectViewPane, namedScope: NamedScope?): Boolean {
