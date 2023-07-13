@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.8.21"
+    kotlin("jvm") version "1.8.21"
     id("org.jetbrains.intellij") version "1.13.3"
 }
 
@@ -13,9 +13,21 @@ repositories {
 
 intellij {
     version.set("2022.2.5")
+    plugins.set(listOf("com.intellij.java"))
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
 }
 
 tasks {
+    // https://youtrack.jetbrains.com/issue/IDEA-278926/All-inheritors-of-UsefulTestCase-are-invisible-for-Gradle#focus=Comments-27-5561012.0-0
+    val test by getting(Test::class) {
+        setScanForTestClasses(false)
+        // Only run tests from classes that end with "Test"
+        include("**/*Test.class")
+    }
+
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
