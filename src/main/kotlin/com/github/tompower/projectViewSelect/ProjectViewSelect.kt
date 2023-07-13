@@ -34,7 +34,5 @@ data class ViewSelect(
     private val namedScope: NamedScope?
 ) {
     val id = viewPane.id
-    val subId = namedScope?.subId()
-
-    private fun NamedScope.subId() = this.toString() + "; " + this.javaClass
+    val subId = namedScope?.run { this.toString() + "; " + this.javaClass }
 }
