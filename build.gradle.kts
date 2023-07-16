@@ -42,13 +42,13 @@ tasks {
         untilBuild.set("232.*")
     }
 
-//    signPlugin {
-//        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-//        privateKey.set(System.getenv("PRIVATE_KEY"))
-//        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-//    }
-//
-//    publishPlugin {
-//        token.set(System.getenv("PUBLISH_TOKEN"))
-//    }
+    signPlugin {
+        certificateChainFile.set(file("certificate/chain.crt"))
+        privateKeyFile.set(file("certificate/private.pem"))
+        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
+    }
+
+    publishPlugin {
+        token.set(System.getenv("PUBLISH_TOKEN"))
+    }
 }
