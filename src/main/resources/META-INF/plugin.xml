@@ -1,18 +1,16 @@
 <idea-plugin>
     <id>com.github.tom-power.project-view-select</id>
     <name>Project View Select</name>
-    <version>0.1.0</version>
+    <version>0.1.2</version>
     <vendor email="" url="https://github.com/tom-power/project-view-select">Tom Power</vendor>
 
     <description>
         <![CDATA[
-            IntelliJ plugin providing actions to select <a href="https://www.jetbrains.com/help/idea/project-tool-window.html#views">project window views</a>.<br>
+            IntelliJ plugin providing actions to select <a href="https://www.jetbrains.com/help/idea/project-tool-window.html#views">project tool window views</a>. Can be used with shortcuts to navigate directly between views. Actions to select <code>Project</code> and <code>All Changed Files</code> views available currently.
         ]]>
     </description>
 
     <depends>com.intellij.modules.lang</depends>
-    <depends>com.intellij.modules.java</depends>
-    <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
