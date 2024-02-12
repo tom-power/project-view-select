@@ -1,7 +1,7 @@
 plugins {
     id("java")
-    kotlin("jvm") version "1.8.21"
-    id("org.jetbrains.intellij") version "1.13.3"
+    kotlin("jvm") version "1.9.22"
+    id("org.jetbrains.intellij") version "1.17.1"
 }
 
 group = "com.github.tompower.go-to-project-view"
