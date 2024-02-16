@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.1"
 }
 
-group = "com.github.tompower.go-to-project-view"
+group = "com.github.tompower.project-view-select"
 version = "0.1.4"
 
 repositories {
