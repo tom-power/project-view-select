@@ -1,7 +1,4 @@
-## Project view select
-
-[![ci status][badge]][workflow]
-
+## Project view select [![ci status][badge]][workflow]
 [workflow]: https://github.com/tom-power/project-view-select/actions/workflows/gradle.yml
 [badge]: https://img.shields.io/github/actions/workflow/status/tom-power/project-view-select/gradle.yml?style=flat-round&logo=github&label=CI%20status
 
