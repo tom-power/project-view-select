@@ -8,7 +8,6 @@ import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.ide.projectView.impl.ProjectViewPane
 import com.intellij.ide.scopeView.ScopeViewPane
 import com.intellij.openapi.util.ActionCallback
-import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.ToolWindowEP
@@ -32,19 +31,19 @@ abstract class AbstractProjectWindowTestCase : LightPlatformTestCase() {
     protected val currentProjectViewPane: AbstractProjectViewPane?
         get() = projectView?.currentProjectViewPane
 
-    protected val actionToViewSelect
-        get() = mapOf(
-            "ProjectViewSelectProject" to
-                ViewSelect(
-                    viewPane = ProjectViewPane(project),
-                    namedScope = null
-                ),
-            "ProjectViewSelectScopeAllChangedFiles" to
-                ViewSelect(
-                    viewPane = ScopeViewPane(project),
-                    namedScope = ChangeListScope(ChangeListManager.getInstance(project))
-                )
-        )
+    protected val projectViewSelectProject: ViewSelect
+        get() =
+            ViewSelect(
+                viewPane = ProjectViewPane(project),
+                namedScope = null
+            )
+
+    protected val projectViewSelectScopeAllChangedFiles: ViewSelect
+        get() =
+            ViewSelect(
+                viewPane = ScopeViewPane(project),
+                namedScope = ChangeListScope(ChangeListManager.getInstance(project))
+            )
 
     final override fun runInDispatchThread() = true
 

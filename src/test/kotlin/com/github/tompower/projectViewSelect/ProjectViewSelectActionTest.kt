@@ -1,5 +1,7 @@
 package com.github.tompower.projectViewSelect
 
+import com.github.tompower.projectViewSelect.action.ProjectViewSelectAction
+import com.github.tompower.projectViewSelect.action.SelectScopeAllChangedFiles
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -9,19 +11,24 @@ import com.intellij.testFramework.SkipInHeadlessEnvironment
 @SkipInHeadlessEnvironment
 class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
     fun testActions() {
-        actionToViewSelect.forEach { (action, viewSelect) ->
-            runAction(action, actionFor())
+        projectViewSelectProject.let { viewSelect ->
+            (ActionManager.getInstance()
+                .getAction("ProjectViewSelectProject") as ProjectViewSelectAction)
+                .actionPerformed(actionFor())
             with(viewSelect) {
                 assertEquals(id, currentProjectViewPane?.id)
                 assertEquals(subId, currentProjectViewPane?.subId)
             }
         }
-    }
-
-    private fun runAction(action: String, event: AnActionEvent) {
-        ActionManager.getInstance()
-            .getAction(action)
-            .actionPerformed(event)
+        projectViewSelectScopeAllChangedFiles.let { viewSelect ->
+            (ActionManager.getInstance()
+                .getAction("ProjectViewSelectScopeAllChangedFiles") as SelectScopeAllChangedFiles)
+                .actionPerformed(actionFor())
+            with(viewSelect) {
+                assertEquals(id, currentProjectViewPane?.id)
+                assertEquals(subId, currentProjectViewPane?.subId)
+            }
+        }
     }
 
     private fun actionFor(): AnActionEvent {
