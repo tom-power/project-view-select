@@ -12,7 +12,14 @@ class ProjectViewSelectTest : AbstractProjectWindowTestCase() {
     }
 
     fun testChangeView() {
-        actionToViewSelect.values.forEach { viewSelect ->
+        projectViewSelectProject.let { viewSelect ->
+            projectViewSelect.changeView(viewSelect)
+            with(viewSelect) {
+                assertEquals(id, currentProjectViewPane?.id)
+                assertEquals(subId, currentProjectViewPane?.subId)
+            }
+        }
+        projectViewSelectScopeAllChangedFiles.let { viewSelect ->
             projectViewSelect.changeView(viewSelect)
             with(viewSelect) {
                 assertEquals(id, currentProjectViewPane?.id)
