@@ -2,10 +2,8 @@ package com.github.tompower.projectViewSelect.action
 
 import com.github.tompower.projectViewSelect.ProjectViewSelect
 import com.github.tompower.projectViewSelect.ViewSelect
-import com.intellij.ide.actions.ActivateToolWindowAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.ide.projectView.impl.AbstractProjectViewPane
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
@@ -34,8 +32,8 @@ abstract class ProjectViewSelectAction : AnAction(), DumbAware {
     }
 
     private fun activateProjectWindow(event: AnActionEvent) {
-        (ActionManager.getInstance()
-            .getAction("ActivateProjectToolWindow") as ActivateToolWindowAction)
-            .actionPerformed(event)
+        val project = event.project ?: return
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Project")
+        toolWindow?.activate(null)
     }
 }
