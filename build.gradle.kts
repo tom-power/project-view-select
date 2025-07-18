@@ -42,12 +42,15 @@ tasks {
         untilBuild.set("")
     }
 
+    // https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html#deploying-a-plugin-with-gradle
+    // https://plugins.jetbrains.com/docs/intellij/plugin-signing.html#signing-methods
     signPlugin {
         certificateChainFile.set(file("certificate/chain.crt"))
         privateKeyFile.set(file("certificate/private.pem"))
         password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
     }
 
+    // https://plugins.jetbrains.com/author/me/tokens
     publishPlugin {
         token.set(System.getenv("PUBLISH_TOKEN"))
     }
