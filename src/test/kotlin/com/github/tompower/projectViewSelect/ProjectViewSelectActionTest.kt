@@ -1,29 +1,28 @@
 package com.github.tompower.projectViewSelect
 
 import com.github.tompower.projectViewSelect.action.ProjectViewSelectAction
+import com.github.tompower.projectViewSelect.action.SelectProject
 import com.github.tompower.projectViewSelect.action.SelectScopeAllChangedFiles
 import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.testFramework.MapDataContext
-import com.intellij.testFramework.SkipInHeadlessEnvironment
+import com.intellij.testFramework.TestActionEvent
 
-@SkipInHeadlessEnvironment
 class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
     fun testActions() {
         projectViewSelectProject.let { viewSelect ->
-            (ActionManager.getInstance()
-                .getAction("ProjectViewSelectProject") as ProjectViewSelectAction)
-                .actionPerformed(actionFor())
+            val action = ActionManager.getInstance()
+                .getAction("ProjectViewSelectProject") as ProjectViewSelectAction
+            performAction(action)
             with(viewSelect) {
                 assertEquals(id, currentProjectViewPane?.id)
                 assertEquals(subId, currentProjectViewPane?.subId)
             }
         }
         projectViewSelectScopeAllChangedFiles.let { viewSelect ->
-            (ActionManager.getInstance()
-                .getAction("ProjectViewSelectScopeAllChangedFiles") as SelectScopeAllChangedFiles)
-                .actionPerformed(actionFor())
+            val action = ActionManager.getInstance()
+                .getAction("ProjectViewSelectScopeAllChangedFiles") as SelectScopeAllChangedFiles
+            performAction(action)
             with(viewSelect) {
                 assertEquals(id, currentProjectViewPane?.id)
                 assertEquals(subId, currentProjectViewPane?.subId)
@@ -31,10 +30,17 @@ class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
         }
     }
 
-    private fun actionFor(): AnActionEvent {
-        val context = MapDataContext()
-        context.put(CommonDataKeys.PROJECT, project)
-        return AnActionEvent.createFromDataContext("", null, context)
+    private fun performAction(action: AnAction) {
+        val event = TestActionEvent.createTestEvent { dataId ->
+            when (dataId) {
+                CommonDataKeys.PROJECT.name -> project
+                else -> null
+            }
+        }
+        when (action) {
+            is SelectProject -> action.actionPerformed(event)
+            is SelectScopeAllChangedFiles -> action.actionPerformed(event)
+        }
     }
 
 }

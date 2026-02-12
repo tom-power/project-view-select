@@ -24,7 +24,7 @@ class ProjectViewSelect(
 
     fun changeView(viewSelect: ViewSelect) {
         with(viewSelect) {
-            projectView.changeViewCB(id, subId)
+            projectView.changeView(id, subId)
         }
     }
 }
