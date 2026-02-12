@@ -1,5 +1,6 @@
 package com.github.tompower.projectViewSelect
 
+import com.github.tompower.projectViewSelect.model.ViewSelect
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.ide.projectView.impl.ProjectViewPane

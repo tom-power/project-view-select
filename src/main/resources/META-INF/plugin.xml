@@ -14,11 +14,11 @@
 
     <actions>
         <action id="ProjectViewSelectProject"
-                class="com.github.tompower.projectViewSelect.action.SelectProject"
+                class="com.github.tompower.projectViewSelect.SelectProject"
                 text="Project View Select Project">
         </action>
         <action id="ProjectViewSelectScopeAllChangedFiles"
-                class="com.github.tompower.projectViewSelect.action.SelectScopeAllChangedFiles"
+                class="com.github.tompower.projectViewSelect.SelectScopeAllChangedFiles"
                 text="Project View Select Scope All Changed Files">
         </action>
     </actions>

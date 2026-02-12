@@ -1,4 +1,4 @@
-package com.github.tompower.projectViewSelect.action
+package com.github.tompower.projectViewSelect
 
 import com.intellij.ide.scopeView.ScopeViewPane
 import com.intellij.openapi.actionSystem.AnActionEvent

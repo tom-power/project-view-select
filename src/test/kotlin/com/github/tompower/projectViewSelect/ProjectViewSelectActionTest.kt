@@ -1,14 +1,12 @@
 package com.github.tompower.projectViewSelect
 
-import com.github.tompower.projectViewSelect.action.ProjectViewSelectAction
-import com.github.tompower.projectViewSelect.action.SelectProject
-import com.github.tompower.projectViewSelect.action.SelectScopeAllChangedFiles
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.testFramework.TestActionEvent
 
 class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
+
     fun testActions() {
         projectViewSelectProject.let { viewSelect ->
             val action = ActionManager.getInstance()
