@@ -24,9 +24,13 @@ abstract class ProjectViewSelectAction : AnAction(), DumbAware {
             projectView = ProjectView.getInstance(project),
             windowManager = ToolWindowManager.getInstance(project)
         ).run {
-            changeView(viewSelect)
-            if (shouldActivateProjectWindow(viewSelect)) {
-                activateProjectWindow(event)
+            if (isCurrentViewAndActive(viewSelect)) {
+                deactivateProjectWindow(event)
+            } else {
+                changeView(viewSelect)
+                if (shouldActivateProjectWindow(viewSelect)) {
+                    activateProjectWindow(event)
+                }
             }
         }
     }
@@ -35,6 +39,12 @@ abstract class ProjectViewSelectAction : AnAction(), DumbAware {
         val project = event.project ?: return
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Project")
         toolWindow?.activate(null)
+    }
+
+    private fun deactivateProjectWindow(event: AnActionEvent) {
+        val project = event.project ?: return
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Project")
+        toolWindow?.hide()
     }
 }
 
@@ -52,6 +62,18 @@ private class ProjectViewSelect(
             }
 
         return !isProjectWindowActive() || isCurrentViewPane()
+    }
+
+    fun isCurrentViewAndActive(viewSelect: ViewSelect): Boolean {
+        fun isProjectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
+
+        fun isCurrentViewPane(): Boolean =
+            with(projectView.currentProjectViewPane) {
+                id == viewSelect.id
+                    && subId == (viewSelect.subId ?: subId)
+            }
+
+        return isProjectWindowActive() && isCurrentViewPane()
     }
 
     fun changeView(viewSelect: ViewSelect) {

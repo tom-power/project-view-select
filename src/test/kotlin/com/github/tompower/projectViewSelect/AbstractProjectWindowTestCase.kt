@@ -15,6 +15,7 @@ import org.mockito.Mockito
 abstract class AbstractProjectWindowTestCase : LightPlatformTestCase() {
     protected lateinit var manager: ToolWindowManager
     protected lateinit var projectView: ProjectView
+    private lateinit var toolWindow: com.intellij.openapi.wm.ToolWindow
 
     protected var currentProjectViewPane: AbstractProjectViewPane? = null
 
@@ -37,9 +38,20 @@ abstract class AbstractProjectWindowTestCase : LightPlatformTestCase() {
         setUpMocks()
     }
 
+    protected fun setProjectWindowActive(active: Boolean) {
+        Mockito.`when`(manager.activeToolWindowId).thenReturn(if (active) "Project" else null)
+    }
+
+    protected fun verifyProjectWindowDeactivated() {
+        Mockito.verify(toolWindow).hide()
+    }
+
     private fun setUpMocks() {
         manager = Mockito.mock(ToolWindowManager::class.java)
         Mockito.`when`(manager.activeToolWindowId).thenReturn(null)
+
+        toolWindow = Mockito.mock(com.intellij.openapi.wm.ToolWindow::class.java)
+        Mockito.`when`(manager.getToolWindow("Project")).thenReturn(toolWindow)
 
         project.replaceService(ToolWindowManager::class.java, manager, testRootDisposable)
 

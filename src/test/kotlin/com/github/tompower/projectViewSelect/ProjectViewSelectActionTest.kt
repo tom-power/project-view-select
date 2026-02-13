@@ -28,6 +28,25 @@ class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
         }
     }
 
+    fun testDeactivateWindowWhenCurrentViewSelected() {
+        projectViewSelectProject.let { viewSelect ->
+            val action = ActionManager.getInstance()
+                .getAction("ProjectViewSelectProject") as ProjectViewSelectAction
+
+            performAction(action)
+            with(viewSelect) {
+                assertEquals(id, currentProjectViewPane?.id)
+                assertEquals(subId, currentProjectViewPane?.subId)
+            }
+
+            setProjectWindowActive(true)
+
+            performAction(action)
+
+            verifyProjectWindowDeactivated()
+        }
+    }
+
     private fun performAction(action: AnAction) {
         val event = TestActionEvent.createTestEvent { dataId ->
             when (dataId) {
