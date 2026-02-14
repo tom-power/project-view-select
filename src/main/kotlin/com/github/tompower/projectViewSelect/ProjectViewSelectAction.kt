@@ -57,8 +57,5 @@ private class ProjectViewSelect(
     }
 
     fun currentViewMatches(view: View): Boolean =
-        with(projectView.currentProjectViewPane) {
-            id == view.id
-                && subId == (view.subId ?: subId)
-        }
+        projectView.currentProjectViewPane?.run { View(id, subId) } == view
 }

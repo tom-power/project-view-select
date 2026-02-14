@@ -4,9 +4,14 @@ import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.psi.search.scope.packageSet.NamedScope
 
 data class View(
-    private val viewPane: AbstractProjectViewPane,
-    private val namedScope: NamedScope?
+    val id: String,
+    val subId: String?,
 ) {
-    val id = viewPane.id
-    val subId = namedScope?.run { this.toString() + "; " + this.javaClass }
+    constructor(
+        viewPane: AbstractProjectViewPane,
+        namedScope: NamedScope?
+    ) : this(
+        id = viewPane.id,
+        subId = namedScope?.run { this.toString() + "; " + this.javaClass }
+    )
 }
