@@ -1,6 +1,6 @@
 package com.github.tompower.projectViewSelect
 
-import com.github.tompower.projectViewSelect.model.ViewSelect
+import com.github.tompower.projectViewSelect.model.View
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.ide.projectView.impl.ProjectViewPane
@@ -19,14 +19,14 @@ abstract class AbstractProjectWindowTestCase : LightPlatformTestCase() {
 
     protected var currentProjectViewPane: AbstractProjectViewPane? = null
 
-    protected val projectViewSelectProject: ViewSelect
-        get() = ViewSelect(
+    protected val projectViewSelectProject: View
+        get() = View(
             viewPane = ProjectViewPane(project),
             namedScope = null
         )
 
-    protected val projectViewSelectScopeAllChangedFiles: ViewSelect
-        get() = ViewSelect(
+    protected val projectViewSelectScopeAllChangedFiles: View
+        get() = View(
             viewPane = ScopeViewPane(project),
             namedScope = ChangeListScope(ChangeListManager.getInstance(project))
         )
@@ -38,8 +38,8 @@ abstract class AbstractProjectWindowTestCase : LightPlatformTestCase() {
         setUpMocks()
     }
 
-    protected fun setProjectWindowActive(active: Boolean) {
-        Mockito.`when`(manager.activeToolWindowId).thenReturn(if (active) "Project" else null)
+    protected fun setProjectWindowActive() {
+        Mockito.`when`(manager.activeToolWindowId).thenReturn( "Project")
     }
 
     protected fun verifyProjectWindowDeactivated() {

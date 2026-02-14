@@ -1,84 +1,64 @@
 package com.github.tompower.projectViewSelect
 
-import com.github.tompower.projectViewSelect.model.ViewSelect
+import com.github.tompower.projectViewSelect.model.View
 import com.intellij.ide.projectView.ProjectView
-import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowId
 import com.intellij.openapi.wm.ToolWindowManager
-import com.intellij.psi.search.scope.packageSet.NamedScope
 
 abstract class ProjectViewSelectAction : AnAction(), DumbAware {
     protected fun projectViewSelect(
-        event: AnActionEvent,
         project: Project,
-        viewPane: AbstractProjectViewPane,
-        namedScope: NamedScope?
+        view: View
     ) {
-        val viewSelect = ViewSelect(viewPane, namedScope)
-
         ProjectViewSelect(
             projectView = ProjectView.getInstance(project),
-            windowManager = ToolWindowManager.getInstance(project)
+            windowManager = ToolWindowManager.getInstance(project),
+            project = project,
         ).run {
-            if (isCurrentViewAndActive(viewSelect)) {
-                deactivateProjectWindow(event)
+            if (projectWindowActive() && currentViewMatches(view)) {
+                deactivateProjectWindow()
             } else {
-                changeView(viewSelect)
-                if (shouldActivateProjectWindow(viewSelect)) {
-                    activateProjectWindow(event)
+                changeView(view)
+                if (!projectWindowActive()) {
+                    activateProjectWindow()
                 }
             }
         }
     }
 
-    private fun activateProjectWindow(event: AnActionEvent) {
-        val project = event.project ?: return
-        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Project")
-        toolWindow?.activate(null)
-    }
-
-    private fun deactivateProjectWindow(event: AnActionEvent) {
-        val project = event.project ?: return
-        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Project")
-        toolWindow?.hide()
-    }
 }
 
 private class ProjectViewSelect(
-    val projectView: ProjectView,
-    val windowManager: ToolWindowManager
+    private val projectView: ProjectView,
+    private val windowManager: ToolWindowManager,
+    private val project: Project,
 ) {
-    fun shouldActivateProjectWindow(viewSelect: ViewSelect): Boolean {
-        fun isProjectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
 
-        fun isCurrentViewPane(): Boolean =
-            with(projectView.currentProjectViewPane) {
-                id == viewSelect.id
-                    && subId == (viewSelect.subId ?: subId)
-            }
+    fun projectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
 
-        return !isProjectWindowActive() || isCurrentViewPane()
+    fun activateProjectWindow() {
+        projectWindow()?.activate(null)
     }
 
-    fun isCurrentViewAndActive(viewSelect: ViewSelect): Boolean {
-        fun isProjectWindowActive(): Boolean = windowManager.activeToolWindowId == ToolWindowId.PROJECT_VIEW
-
-        fun isCurrentViewPane(): Boolean =
-            with(projectView.currentProjectViewPane) {
-                id == viewSelect.id
-                    && subId == (viewSelect.subId ?: subId)
-            }
-
-        return isProjectWindowActive() && isCurrentViewPane()
+    fun deactivateProjectWindow() {
+        projectWindow()?.hide()
     }
 
-    fun changeView(viewSelect: ViewSelect) {
-        with(viewSelect) {
+    private fun projectWindow(): ToolWindow? = ToolWindowManager.getInstance(project).getToolWindow("Project")
+
+    fun changeView(view: View) {
+        with(view) {
             projectView.changeView(id, subId)
         }
     }
+
+    fun currentViewMatches(view: View): Boolean =
+        with(projectView.currentProjectViewPane) {
+            id == view.id
+                && subId == (view.subId ?: subId)
+        }
 }

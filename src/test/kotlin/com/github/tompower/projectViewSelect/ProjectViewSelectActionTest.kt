@@ -39,7 +39,7 @@ class ProjectViewSelectActionTest : AbstractProjectWindowTestCase() {
                 assertEquals(subId, currentProjectViewPane?.subId)
             }
 
-            setProjectWindowActive(true)
+            setProjectWindowActive()
 
             performAction(action)
 
