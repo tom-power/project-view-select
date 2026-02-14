@@ -5,9 +5,13 @@ import com.intellij.ide.projectView.ProjectView
 import com.intellij.ide.projectView.impl.AbstractProjectViewPane
 import com.intellij.ide.projectView.impl.ProjectViewPane
 import com.intellij.ide.scopeView.ScopeViewPane
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.testFramework.LightPlatformTestCase
+import com.intellij.testFramework.TestActionEvent
 import com.intellij.testFramework.replaceService
 import com.intellij.vcs.changes.ChangeListScope
 import org.mockito.Mockito
@@ -25,11 +29,18 @@ abstract class AbstractProjectViewSelectTestCase : LightPlatformTestCase() {
             namedScope = null
         )
 
-    protected val allChangedFilesView: View
+    protected val changedFilesView: View
         get() = View(
             viewPane = ScopeViewPane(project),
             namedScope = ChangeListScope(ChangeListManager.getInstance(project))
         )
+
+    protected val selectProjectViewAction: ProjectViewSelectAction
+        get() = ActionManager.getInstance().getAction("ProjectViewSelectProject") as ProjectViewSelectAction
+
+    protected val selectChangedFilesViewAction: SelectScopeAllChangedFiles
+        get() = ActionManager.getInstance()
+            .getAction("ProjectViewSelectScopeAllChangedFiles") as SelectScopeAllChangedFiles
 
     final override fun runInDispatchThread() = true
 
@@ -37,6 +48,28 @@ abstract class AbstractProjectViewSelectTestCase : LightPlatformTestCase() {
         super.setUp()
         setUpMocks()
     }
+
+
+    protected fun currentViewIs(view: View) {
+        assertEquals(
+            view,
+            currentProjectViewPane?.run { View(id, subId) }
+        )
+    }
+
+    protected fun performAction(action: AnAction) {
+        val event = TestActionEvent.createTestEvent { dataId ->
+            when (dataId) {
+                CommonDataKeys.PROJECT.name -> project
+                else -> null
+            }
+        }
+        when (action) {
+            is SelectProject -> action.actionPerformed(event)
+            is SelectScopeAllChangedFiles -> action.actionPerformed(event)
+        }
+    }
+
 
     private var activeWindow: String? = null
 
