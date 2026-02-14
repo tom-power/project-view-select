@@ -31,6 +31,10 @@ abstract class ProjectViewSelectActionContract : AbstractProjectViewSelectTestCa
         Given {
             projectWindowIsInactive()
             performAction(otherAction())
+        }
+
+        Then {
+            projectWindowIsActive()
             currentViewIs(otherView())
         }
 
