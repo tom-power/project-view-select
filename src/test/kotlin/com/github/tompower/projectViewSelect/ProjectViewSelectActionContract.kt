@@ -2,13 +2,16 @@ package com.github.tompower.projectViewSelect
 
 import com.github.tompower.projectViewSelect.model.View
 import com.intellij.openapi.actionSystem.AnAction
+import org.junit.Test
 
 abstract class ProjectViewSelectActionContract : AbstractProjectViewSelectTestCase() {
     abstract val action: () -> AnAction
     abstract val view: () -> View
     abstract val otherAction: () -> AnAction
+    abstract val otherView: () -> View
 
-    fun `test select view action`() {
+    @Test
+    fun `can select a view`() {
         Given {
             projectWindowIsInactive()
         }
@@ -23,30 +26,12 @@ abstract class ProjectViewSelectActionContract : AbstractProjectViewSelectTestCa
         }
     }
 
-    fun `test deactivate project window when view select action matches view`() {
-        Given {
-            projectWindowIsInactive()
-            performAction(action())
-        }
-
-        Then {
-            projectWindowIsActive()
-            currentViewIs(view())
-        }
-
-        When {
-            performAction(action())
-        }
-
-        Then {
-            projectWindowIsInactive()
-        }
-    }
-
-    fun `test view select action from other view`() {
+    @Test
+    fun `can select a view from another view`() {
         Given {
             projectWindowIsInactive()
             performAction(otherAction())
+            currentViewIs(otherView())
         }
 
         When {
@@ -56,6 +41,27 @@ abstract class ProjectViewSelectActionContract : AbstractProjectViewSelectTestCa
         Then {
             projectWindowIsActive()
             currentViewIs(view())
+        }
+    }
+
+    @Test
+    fun `project window is deactivated when action matches view`() {
+        Given {
+            projectWindowIsInactive()
+            performAction(action())
+        }
+
+        Then {
+            projectWindowIsActive()
+            currentViewIs(view())
+        }
+
+        When {
+            performAction(action())
+        }
+
+        Then {
+            projectWindowIsInactive()
         }
     }
 }

@@ -10,13 +10,13 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.openapi.wm.ToolWindowManager
-import com.intellij.testFramework.LightPlatformTestCase
+import com.intellij.testFramework.LightPlatform4TestCase
 import com.intellij.testFramework.TestActionEvent
 import com.intellij.testFramework.replaceService
 import com.intellij.vcs.changes.ChangeListScope
 import org.mockito.Mockito
 
-abstract class AbstractProjectViewSelectTestCase : LightPlatformTestCase() {
+abstract class AbstractProjectViewSelectTestCase : LightPlatform4TestCase() {
     protected lateinit var manager: ToolWindowManager
     protected lateinit var currentProjectView: ProjectView
     private lateinit var toolWindow: com.intellij.openapi.wm.ToolWindow
@@ -35,10 +35,10 @@ abstract class AbstractProjectViewSelectTestCase : LightPlatformTestCase() {
             namedScope = ChangeListScope(ChangeListManager.getInstance(project))
         )
 
-    protected val selectProjectViewAction: ProjectViewSelectAction
+    protected val projectViewAction: ProjectViewSelectAction
         get() = ActionManager.getInstance().getAction("ProjectViewSelectProject") as ProjectViewSelectAction
 
-    protected val selectChangedFilesViewAction: SelectScopeAllChangedFiles
+    protected val changedFilesViewAction: SelectScopeAllChangedFiles
         get() = ActionManager.getInstance()
             .getAction("ProjectViewSelectScopeAllChangedFiles") as SelectScopeAllChangedFiles
 
